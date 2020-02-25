@@ -1,17 +1,20 @@
 pipeline {
     agent any
     stages {
-        stage('Upload to AWS.'){
+        stage('Upload to AWS'){
             steps {
-                withAWS(region:'ap-southeast-1', credentials:'AKIAR4ZVDGTGZGZOIIBF') {
-                  s3Upload(file:'index.html', bucket:'arn:aws:s3:::guru-c3-jenkins'){
-                sh 'echo "Hello World"'
-                sh '''
-                    echo "Multiline shell steps works too"
-                    ls -lah
-                '''
+                    withAWS(credentials: 'aws-static', region: 'ap-southeast-1') {
+                        s3Upload bucket: 'arn:aws:s3:::guru-c3-jenkins', file: 'index.html'                                                 
+                                steps {  
+                                        sh 'echo "Hello World"'
+                                        sh '''
+                                            echo "Multiline shell steps works too"
+                                            ls -lah
+                                        '''
                        }
-              }
+                    }  
+                     
+              
            }
        }
     }
